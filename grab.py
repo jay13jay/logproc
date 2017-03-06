@@ -8,7 +8,7 @@ threads = []
 
 # include trailing / - adds files in directory to queue
 def get_files(directory,q):
-    path = directory + '*.json'
+    path = directory + '*'
     files = glob.glob(path)
     count = 0
     for f in files:
