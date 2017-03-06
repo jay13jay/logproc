@@ -9,7 +9,8 @@ Instructions
 
 - clone repo
 - run script:
-\t $ python grab.py
-
+```
+$ python grab.py
+```
 
 
