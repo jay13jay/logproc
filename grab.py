@@ -20,17 +20,21 @@ def get_files(directory,q):
 def parse_data(q):
     while not q.empty():
         f = q.get()
-        with open (f) as data_file:
-            data = json.load(data_file)
-            data_file.close()
+        try:
+            with open (f) as data_file:
+                data = json.load(data_file)
+                data_file.close()
 
-        info_j = data["additional_info"]["imports"]
-        sha_j = data['sha256']
+            info_j = data["additional_info"]["imports"]
+            sha_j = data['sha256']
 
-        #
-        # print "Additional_info imports:\n", json.dumps(info_j, indent=2, sort_keys=True)
-        print "SHA256:\t", sha_j
-        q.task_done()
+            #
+            # print "Additional_info imports:\n", json.dumps(info_j, indent=2, sort_keys=True)
+            print "SHA256:\t", sha_j
+            q.task_done()
+        except:
+            print "unable to open file!", f
+            q.task_done()
 
 
 def build_threads(q,batch):
