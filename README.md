@@ -18,6 +18,6 @@ NOTE: make sure all tasks are done before the q.task_done() call as this registe
 
 Variables
 ---
-num_threads: each thread reads a file and outputs - adjust based on system memory
-file_dir: path to directory containing the log files - include trailing /
+- num_threads: each thread reads a file and outputs - adjust based on system memory
+- file_dir: path to directory containing the log files - include trailing /
 
