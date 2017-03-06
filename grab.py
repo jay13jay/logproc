@@ -30,6 +30,8 @@ def parse_data(q):
 
 #       print "Additional_info imports:\n", json.dumps(info_j, indent=2, sort_keys=True)
         print "SHA256:\t", sha_j
+        q.task_done()
+
 
 def build_threads(q,batch):
     for i in range(batch):
@@ -63,7 +65,6 @@ def main():
         thread_count = 0
         #for i in range(len(threads)):
         #    threads[i].join()
-        file_queue.task_done()
             
 
 
