@@ -1,20 +1,17 @@
 #!/usr/bin/env python
-import json,thread,Queue,glob
+import json,Queue,glob
+from threading import Thread
 
-num_threads = 2
-
+num_threads = 2 
 file_queue = Queue.Queue()
+threads = []
+
 # pass list of filenames
 def add_items(files,q):
     for f in files:
         q.put(f)
 
-# pass name of queue, returns item from queue
-def get_item(q):
-    if not q.empty():
-        return q.get()
-    
-# pass a directory containg json encoded files - include trailing /
+# include trailing / - adds files in directory to queue
 def get_files(directory):
     path = directory + '*.json'
     files = glob.glob(path)
@@ -23,7 +20,8 @@ def get_files(directory):
 # pass 'file' - a JSON encoded filepath - print out needed values
 def parse_data(q):
     while not q.empty():
-        f = get_item(q)
+        f = q.get()
+        print f
         with open (f) as data_file:
             data = json.load(data_file)
 
@@ -37,7 +35,32 @@ def build_threads(q,batch):
     for i in range(batch):
         worker = Thread(target=parse_data,args=(q,))
         worker.setDaemon(True)
-        worker.start()
+        threads.append(worker)
+
+def start_threads():
+    count = 0
+    for t in threads:
+        print "Starting thread: ", count
+        t.start()
+        count += 1
+
+def main():
+    # retrive files
+    get_files('files/')
+    # set up threads
+    build_threads(file_queue,num_threads)
+    # print thread count
+    print len(threads)
+    # Start threads
+    start_threads()
+    # join threads
+    for t in threads:
+        print t
+        t.join()
 
 
-build_threads(file_queue,num_threads)
+
+
+file_queue.join()
+
+main()
