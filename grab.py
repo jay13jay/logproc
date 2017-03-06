@@ -23,12 +23,13 @@ def parse_data(q):
         f = q.get()
         with open (f) as data_file:
             data = json.load(data_file)
+            data_file.close()
 
-    info_j = data["additional_info"]["imports"]
-    sha_j = data['sha256']
+        info_j = data["additional_info"]["imports"]
+        sha_j = data['sha256']
 
-#    print "Additional_info imports:\n", json.dumps(info_j, indent=2, sort_keys=True)
-    print "SHA256:\t", sha_j
+#       print "Additional_info imports:\n", json.dumps(info_j, indent=2, sort_keys=True)
+        print "SHA256:\t", sha_j
 
 def build_threads(q,batch):
     for i in range(batch):
@@ -60,10 +61,14 @@ def main():
         start_threads()
         # join threads
         thread_count = 0
-        for i in range(len(threads)):
-            threads[i].join()
+        #for i in range(len(threads)):
+        #    threads[i].join()
+        file_queue.task_done()
             
 
 
-
+print "Starting main loop"
 main()
+print "passed main, joining queue"
+file_queue.join()
+print "done!"
