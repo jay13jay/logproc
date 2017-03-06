@@ -19,10 +19,10 @@ def get_files(directory,q):
 
 # pass 'file' - a JSON encoded filepath - print out needed values
 def parse_data(q):
-    with not q.empty():
+    while not q.empty():
         f = q.get()
-    with open (f) as data_file:
-        data = json.load(data_file)
+        with open (f) as data_file:
+            data = json.load(data_file)
 
     info_j = data["additional_info"]["imports"]
     sha_j = data['sha256']
@@ -35,11 +35,14 @@ def build_threads(q,batch):
         worker = Thread(target=parse_data,args=(q,))
         worker.setDaemon(True)
         threads.append(worker)
+    print threads
 
-def start_threads(count):
-    for t in threads:
+def start_threads():
+    count = 0
+    for i in range(len(threads)):
         print "Starting thread: ", count
-        t.start()
+        threads[i].start()
+        count += 1
 
 def main():
     thread_count = 0
@@ -54,15 +57,12 @@ def main():
         # print thread count
         print "total threads:", len(threads)
         # Start threads
-        start_threads(thread_count)
+        start_threads()
         # join threads
         thread_count = 0
-        for t in threads:
-            t.join()
-            print "LOT:",len(threads)
-            threads.pop(thread_count)
-            thread_count += 1
-            print "LOT:",len(threads)
+        for i in range(len(threads)):
+            threads[i].join()
+            
 
 
 
