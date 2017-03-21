@@ -1,9 +1,10 @@
-#!/usr/bin/env python
-import json,Queue,glob
+#!/usr/bin/env python3
+import json,queue,glob
 from threading import Thread
 
+
 num_threads = 2 
-file_queue = Queue.Queue()
+file_queue = queue.Queue()
 threads = []
 
 # include trailing / - adds files in directory to queue
@@ -30,10 +31,10 @@ def parse_data(q):
 
             #
             # print "Additional_info imports:\n", json.dumps(info_j, indent=2, sort_keys=True)
-            print "SHA256:\t", sha_j
+            print("SHA256:\t", sha_j)
             q.task_done()
         except:
-            print "unable to open file!", f
+            print("unable to open file!", f)
             q.task_done()
 
 
@@ -59,7 +60,7 @@ def main():
         build_threads(file_queue,num_threads)
     elif num_threads > num_files:
         build_threads(file_queue,num_files)
-    print "total threads:", len(threads)
+    print("total threads:", len(threads))
     start_threads()
     # join threads
     thread_count = 0
@@ -68,8 +69,8 @@ def main():
             
 
 
-print "Starting main loop"
+print("Starting main loop")
 main()
-print "passed main, joining queue"
+print("passed main, joining queue")
 file_queue.join()
-print "done!"
+print("done!")
